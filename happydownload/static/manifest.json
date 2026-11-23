@@ -1,0 +1,22 @@
+{
+  "name": "Happydownload v2.0.0 — Adaptive 50+ GB & 4K Video Downloader",
+  "short_name": "Happydownload",
+  "description": "Adaptive Multi-Stream 50+ GB File & 4K Web Video Download Engine by Aswin Lal S Y",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#090d16",
+  "theme_color": "#090d16",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512 1024x1024",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

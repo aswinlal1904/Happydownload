@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "happydownload"
+version = "2.0.0"
+description = "Adaptive multi-stream 50+ GB file & 4K web video downloader with NTFS sparse I/O and SQLite WAL resilience."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+  { name = "Aswin Lal S Y" }
+]
+keywords = ["downloader", "multi-stream", "adaptive", "hls", "yt-dlp", "sparse-file", "video-downloader"]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Environment :: Web Environment",
+  "Environment :: Win32 (MS Windows)",
+  "Environment :: Console",
+  "Intended Audience :: End Users/Desktop",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: Microsoft :: Windows",
+  "Operating System :: POSIX :: Linux",
+  "Operating System :: MacOS",
+  "Programming Language :: Python :: 3",
+  "Topic :: Internet :: WWW/HTTP",
+  "Topic :: Multimedia :: Video",
+]
+dependencies = [
+  "yt-dlp>=2024.10.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/aswinlal1904/Happydownload"
+Repository = "https://github.com/aswinlal1904/Happydownload"
+Releases = "https://github.com/aswinlal1904/Happydownload/releases"
+
+[project.scripts]
+happydownload = "main:main"
+
+[tool.setuptools]
+py-modules = ["main", "build_exe"]
+packages = ["happydownload"]
+
+[tool.setuptools.package-data]
+happydownload = ["static/*"]
+

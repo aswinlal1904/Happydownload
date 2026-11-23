@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#090d16" />
+  <title>Happydownload v2.0.0 — Adaptive 50+ GB &amp; 4K Video Downloader</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="icon" type="image/png" href="/logo.png" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <img src="/logo.png" alt="Happydownload Logo" class="brand-logo" />
+        <div>
+          <div class="brand-title-row">
+            <h1>Happydownload</h1>
+            <span id="version-badge" class="version-pill mono">v2.0.0</span>
+            <span class="dev-pill">by Aswin Lal S Y</span>
+          </div>
+          <p class="subtitle">Adaptive Multi-Stream Engine &bull; 50+ GB Movies, YouTube, Instagram &amp; HLS</p>
+        </div>
+      </div>
+      <div class="topbar-metrics">
+        <button type="button" id="pause-all-btn" class="btn btn-ghost btn-sm">Pause All</button>
+        <button type="button" id="resume-all-btn" class="btn btn-ghost btn-sm">Resume All</button>
+        <button type="button" id="guide-toggle-btn" class="btn btn-secondary btn-sm">How To Use &amp; Guide</button>
+        <button type="button" id="settings-toggle-btn" class="btn btn-secondary btn-sm">Engine Settings</button>
+        <div class="metric-pill">
+          <span class="metric-label">Extractor</span>
+          <strong id="cap-badge" class="mono">HTML/HLS</strong>
+        </div>
+        <div class="metric-pill">
+          <span class="metric-label">Total Speed</span>
+          <strong id="global-speed" class="mono">0 B/s</strong>
+        </div>
+        <div class="metric-pill">
+          <span class="metric-label">Disk Free</span>
+          <strong id="disk-free" class="mono">--</strong>
+        </div>
+        <div class="status-dot-wrap" id="sse-indicator" title="Live telemetry stream">
+          <span class="status-dot"></span>
+          <span id="sse-text">Connecting</span>
+        </div>
+      </div>
+    </header>
+
+    <section id="settings-card" class="card settings-card hidden">
+      <div class="section-header">
+        <h2>Queue, Power &amp; Scheduler Settings</h2>
+        <span id="schedule-badge" class="badge">Scheduler Off</span>
+      </div>
+      <div class="advanced-grid">
+        <label class="field">
+          <span>Max Simultaneous Downloads (0 = Unlimited)</span>
+          <input id="set-max-concurrent" type="number" min="0" max="16" value="2" />
+        </label>
+        <label class="field">
+          <span>When All Downloads Complete</span>
+          <select id="set-complete-action">
+            <option value="none">Do Nothing</option>
+            <option value="sleep">Put PC to Sleep</option>
+            <option value="shutdown">Shut Down PC (30s grace)</option>
+          </select>
+        </label>
+        <label class="field checkbox-field">
+          <input id="set-auto-resume" type="checkbox" checked />
+          <span>Auto-resume interrupted downloads on startup</span>
+        </label>
+        <label class="field checkbox-field">
+          <input id="set-prevent-sleep" type="checkbox" checked />
+          <span>Prevent Windows sleep while downloading</span>
+        </label>
+        <label class="field checkbox-field">
+          <input id="set-clipboard-watch" type="checkbox" />
+          <span>Detect copied movie/archive links from clipboard</span>
+        </label>
+        <label class="field checkbox-field">
+          <input id="set-notifications" type="checkbox" checked />
+          <span>Desktop &amp; browser completion notifications</span>
+        </label>
+        <label class="field checkbox-field">
+          <input id="set-auto-categorize" type="checkbox" />
+          <span>Auto-organize into category subfolders (Video, Audio, Archives, Programs)</span>
+        </label>
+        <label class="field checkbox-field">
+          <input id="set-sched-enabled" type="checkbox" />
+          <span>Enable Bandwidth Schedule (full speed overnight)</span>
+        </label>
+        <label class="field">
+          <span>Full-Speed Window (From / To)</span>
+          <div class="time-pair">
+            <input id="set-sched-start" type="time" value="23:00" />
+            <span>to</span>
+            <input id="set-sched-end" type="time" value="07:00" />
+          </div>
+        </label>
+        <label class="field">
+          <span>Outside-Window Speed Cap (KB/s)</span>
+          <input id="set-sched-cap" type="number" min="64" step="128" value="1024" />
+        </label>
+        <label class="field">
+          <span>Browser Cookies (Instagram / Age-Restricted YouTube)</span>
+          <select id="set-cookies-browser">
+            <option value="none">None (Public Links Only)</option>
+            <option value="edge">Microsoft Edge (Logged-in Session)</option>
+            <option value="chrome">Google Chrome (Logged-in Session)</option>
+            <option value="firefox">Mozilla Firefox (Logged-in Session)</option>
+            <option value="brave">Brave Browser (Logged-in Session)</option>
+          </select>
+        </label>
+      </div>
+      <div class="settings-footer">
+        <button type="button" id="save-settings-btn" class="btn btn-primary btn-sm">Save Settings</button>
+      </div>
+    </section>
+
+    <section id="guide-card" class="card guide-card hidden">
+      <div class="section-header">
+        <h2>How To Use, Engine Architecture &amp; Deployment Guide</h2>
+        <button type="button" id="guide-close-btn" class="btn btn-ghost btn-sm">Close Guide</button>
+      </div>
+      <div class="guide-banner-wrap">
+        <img src="/banner.png" alt="Happydownload v2.0.0 Banner — Developed by Aswin Lal S Y" class="guide-banner-img" loading="lazy" />
+      </div>
+      <div class="guide-grid">
+        <div class="guide-box">
+          <h3>1. How To Use Happydownload</h3>
+          <ul>
+            <li><strong>50+ GB Direct Movies &amp; Archives:</strong> Paste any direct <code>.mkv</code>, <code>.mp4</code>, <code>.iso</code>, or <code>.zip</code> link and click <strong>Download</strong>. Happydownload splits it into parallel range segments and auto-scales up to 32–64 connections.</li>
+            <li><strong>YouTube, Instagram Reels/Posts, TikTok &amp; Web Pages:</strong> Paste the video or playlist URL. Click <strong>Inspect Link</strong> to pick 4K / 1080p HD (with automatic FFmpeg audio muxing) or Audio Only, or click <strong>Download</strong> for instant best quality.</li>
+            <li><strong>Instagram &amp; Private/Restricted Videos:</strong> Open <strong>Engine Settings</strong> &rarr; set <em>Browser Cookies</em> to your logged-in browser (Edge/Chrome/Firefox) so Instagram Reels and age-gated videos authenticate seamlessly.</li>
+            <li><strong>Expired Link Recovery:</strong> If a signed CDN link expires at 90% on a 60 GB movie, paste a fresh link in the right-hand Telemetry panel and click <strong>Replace Link</strong> to resume with zero lost bytes.</li>
+          </ul>
+        </div>
+        <div class="guide-box">
+          <h3>2. How It Works Under The Hood</h3>
+          <ul>
+            <li><strong>Adaptive Hill-Climbing Controller:</strong> Continuously samples EWMA bandwidth every 2.5s, scaling worker threads up while throughput improves and backing off automatically on HTTP 429/503 or latency spikes.</li>
+            <li><strong>NTFS Sparse Random-Access I/O:</strong> Marks <code>.part</code> files with <code>FSCTL_SET_SPARSE</code> so 50+ GB files start downloading at 0ms without freezing the disk with zero-fill writes.</li>
+            <li><strong>Crash-Proof SQLite WAL Checkpointing:</strong> Every segment's exact byte offset is committed to an atomic Write-Ahead Log DB, guaranteeing zero data loss across power outages or restarts.</li>
+            <li><strong>Dynamic Work-Stealing:</strong> Fast idle workers automatically split the remaining tail of slow segments so the final 1% never bottlenecks.</li>
+          </ul>
+        </div>
+        <div class="guide-box">
+          <h3>3. Standalone Desktop App vs. Web UI</h3>
+          <ul>
+            <li><strong>Standalone Desktop Window (Recommended):</strong> Run <code>python main.py --desktop</code> (or double-click <code>launch_desktop.bat</code>) for a dedicated, chromeless native desktop window + Windows System Tray icon.</li>
+            <li><strong>Local Web UI Mode:</strong> Run <code>python main.py</code> to access <code>http://127.0.0.1:8765</code> in any browser or across your local home network (<code>--host 0.0.0.0</code>).</li>
+            <li><strong>Headless CLI Mode:</strong> Run <code>python main.py download &lt;URL&gt;</code> on servers or scripts.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div id="ffmpeg-banner" class="alert-banner warn hidden"></div>
+    <div id="clipboard-banner" class="alert-banner info hidden"></div>
+    <div id="orphan-banner" class="alert-banner warn hidden"></div>
+
+    <section class="card add-card">
+      <form id="download-form">
+        <div class="url-row">
+          <input
+            id="url-input"
+            type="url"
+            placeholder="Paste any direct file link, .m3u8 stream, or video web page / playlist URL..."
+            required
+            autocomplete="off"
+          />
+          <button type="button" id="batch-toggle-btn" class="btn btn-ghost" title="Paste multiple links at once">Batch Links</button>
+          <button type="button" id="probe-btn" class="btn btn-secondary">Inspect Link</button>
+          <button type="submit" id="start-btn" class="btn btn-primary">Download</button>
+        </div>
+
+        <div id="batch-urls-wrap" class="batch-box hidden">
+          <label class="field">
+            <span>Batch URLs (paste multiple direct file or video page links, one per line)</span>
+            <textarea id="batch-urls-input" rows="4" placeholder="https://example.com/movie-part1.mkv&#10;https://example.com/video-page"></textarea>
+          </label>
+        </div>
+
+        <div class="dest-row">
+          <label class="inline-field flex-grow">
+            <span>Save to</span>
+            <div class="folder-input-group">
+              <input id="dest-input" type="text" placeholder="Destination folder..." />
+              <button type="button" id="browse-btn" class="btn btn-ghost">Browse</button>
+            </div>
+          </label>
+          <div class="disk-badge" id="dest-disk-badge">Checking drive...</div>
+        </div>
+
+        <details class="advanced-panel">
+          <summary>Adaptive Speed, Mirrors, Resume &amp; Header Options</summary>
+          <div class="advanced-grid">
+            <label class="field">
+              <span>Custom Filename (optional)</span>
+              <input id="filename-input" type="text" placeholder="Auto-detect from server" />
+            </label>
+            <label class="field">
+              <span>Expected SHA-256 (optional auto-verify)</span>
+              <input id="sha-input" type="text" placeholder="64-char hex checksum" />
+            </label>
+            <label class="field">
+              <span>Max Parallel Connections (<strong id="max-conn-val">16</strong>)</span>
+              <input id="max-conn-input" type="range" min="1" max="32" value="16" />
+            </label>
+            <label class="field">
+              <span>Speed Limit (KB/s, 0 = Unlimited)</span>
+              <input id="speed-limit-input" type="number" min="0" step="128" value="0" />
+            </label>
+            <label class="field checkbox-field">
+              <input id="adaptive-input" type="checkbox" checked />
+              <span>Adaptive Speed Optimizer (auto-tunes connections for maximum throughput)</span>
+            </label>
+            <label class="field">
+              <span>Backup Mirror URLs (optional, one per line)</span>
+              <textarea id="mirrors-input" rows="2" placeholder="https://mirror1.example.com/movie.mkv"></textarea>
+            </label>
+            <label class="field">
+              <span>Custom Request Headers (optional, one per line)</span>
+              <textarea id="headers-input" rows="2" placeholder="Referer: https://example.com&#10;Cookie: session=..."></textarea>
+            </label>
+          </div>
+        </details>
+      </form>
+
+      <div id="probe-preview" class="probe-preview hidden"></div>
+      <div id="form-feedback" class="feedback hidden"></div>
+    </section>
+
+    <main class="main-grid">
+      <section class="card queue-card">
+        <div class="section-header">
+          <h2>Downloads</h2>
+          <div class="queue-header-actions">
+            <button type="button" id="retry-failed-btn" class="btn btn-ghost btn-sm hidden">Retry Failed</button>
+            <button type="button" id="clear-completed-btn" class="btn btn-ghost btn-sm hidden">Clear Completed</button>
+            <span id="queue-count" class="badge">0 tasks</span>
+          </div>
+        </div>
+        <div class="queue-toolbar">
+          <input id="queue-search" type="text" placeholder="Filter downloads by filename or URL..." autocomplete="off" />
+          <div id="queue-filters" class="filter-pills">
+            <button type="button" class="filter-pill active" data-filter="all">All</button>
+            <button type="button" class="filter-pill" data-filter="active">Active</button>
+            <button type="button" class="filter-pill" data-filter="completed">Completed</button>
+            <button type="button" class="filter-pill" data-filter="failed">Failed</button>
+          </div>
+        </div>
+        <div id="downloads-list" class="downloads-list">
+          <div class="empty-state">
+            Paste a link above to start a crash-proof, adaptive multi-stream download.
+          </div>
+        </div>
+      </section>
+
+      <section class="card inspector-card">
+        <div class="section-header">
+          <h2>Live Engine Telemetry</h2>
+          <span id="inspector-badge" class="badge">No selection</span>
+        </div>
+        <div id="inspector-body" class="inspector-body">
+          <div class="empty-state">
+            Select a download to view its adaptive speed graph, segment map, worker connections, and resilience log.
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <div><strong>Happydownload <span id="footer-version" class="mono">v2.0.0</span></strong> &bull; Adaptive 50+ GB &amp; 4K Web Video Download Engine</div>
+      <div>Architected &amp; Developed by <strong id="footer-author">Aswin Lal S Y</strong></div>
+    </footer>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

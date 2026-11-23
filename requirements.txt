@@ -1,0 +1,3 @@
+# Core engine runs on the Python 3.10+ standard library.
+# yt-dlp enables extraction from 1,500+ video platforms (YouTube, Instagram, TikTok, Vimeo, X, etc.)
+yt-dlp>=2024.10.0
